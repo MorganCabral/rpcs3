@@ -11,6 +11,16 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-msse2)
 endif()
 
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+	add_definitions(-std=c++11)
+	#add_definitions(-D__WXGTK__)
+	#add_definitions(-Wfatal-errors)
+	add_definitions(-w) # TODO: remove me
+	add_definitions(-fpermissive) # TODO: remove me
+	add_definitions(-g)	# Debugging!!
+	add_definitions(-msse2)
+endif()
+
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/../bin")
 
@@ -43,7 +53,15 @@ ${OPENAL_INCLUDE_DIR}
 "${CMAKE_SOURCE_DIR}/.."
 )
 
+if(APPLE)
+    include_directories("/opt/X11/include")
+endif()
+
 link_directories("${CMAKE_SOURCE_DIR}/../ffmpeg/${PLATFORM_ARCH}/lib")
+
+if(APPLE)
+    link_directories("/opt/X11/lib")
+endif()
 
 file(
 GLOB_RECURSE
